@@ -9,6 +9,8 @@ services:
             POSTGRES_USER: postgres
         volumes:
             - postgres:/var/lib/postgresql/data
+        ports:
+            - 5432:5423
 
     pgadmin:
         image: dpage/pgadmin4:4.23
@@ -17,7 +19,7 @@ services:
             PGADMIN_DEFAULT_PASSWORD: password
             PGADMIN_LISTEN_PORT: 80
         ports:
-            - 15432:80
+            - 8000:80
         volumes:
             - pgadmin:/var/lib/pgadmin
         depends_on:
