@@ -1,20 +1,22 @@
-from django.shortcuts import get_object_or_404
-from rest_framework import status
-from rest_framework.decorators import api_view
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-from django_filters.rest_framework import DjangoFilterBackend
-from store.filters import ProductFilter
-from store.models import Collection, Product, OrderItem, Review
-from store.serializers import ProductSerializer, CollectionSerializer, ReviewSerializer
+from .pagination import DefaultPagination
+from .filters import ProductFilter
+from .models import Collection, Product, OrderItem, Review
+from .serializers import ProductSerializer, CollectionSerializer, ReviewSerializer
 
 
 # Create your views here.
 class ProductViewSet(ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = ProductFilter
+    pagination_class = DefaultPagination
+    search_fields = ["title", "description"]
+    ordering_fields = ["unit_price", "last_update"]
 
     def get_serializer_context(self):
         return {"request": self.request}
