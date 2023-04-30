@@ -43,8 +43,9 @@ INSTALLED_APPS = [
     "django_filters",
     "debug_toolbar",
     "store",
-    "store_custom",
+    "likes",
     "tags",
+    "core",
 ]
 
 MIDDLEWARE = [
@@ -57,7 +58,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
-ROOT_URLCONF = "e_commerce.urls"
+ROOT_URLCONF = "config.urls"
 
 TEMPLATES = [
     {
@@ -75,7 +76,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "e_commerce.wsgi.application"
+WSGI_APPLICATION = "config.wsgi.application"
 
 
 # Database
@@ -137,3 +138,4 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 INTERNAL_IPS = ["127.0.0.1"]
 
 REST_FRAMEWORK = {"COERCE_DECIMAL_TO_STRING": False, "PAGE_SIZE": DefaultPagination}
+AUTH_USER_MODEL = "core.User"
