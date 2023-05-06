@@ -15,6 +15,6 @@ cart_router.register("items", views.CartItemViewSet, basename="cart-items")
 # Customer
 router.register("customers", views.CustomerViewSet)
 # Orders
-router.register("orders", views.OrderViewsSet, basename="orders")
+router.register("orders", views.OrderViewSet, basename="orders")
 
 urlpatterns = router.urls + products_router.urls + cart_router.urls
