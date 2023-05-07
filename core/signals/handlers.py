@@ -3,6 +3,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 
 
+# test on create
 @receiver(order_created)
 def on_order_created(sender, **kwargs):
     print(kwargs["order"])

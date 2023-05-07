@@ -31,6 +31,7 @@ from .models import (
     Order,
     Product,
     OrderItem,
+    ProductImage,
     Review,
 )
 from .serializers import (
@@ -45,12 +46,13 @@ from .serializers import (
     UpdateCartItemSerializer,
     CustomerSerializer,
     UpdateOrderSerializer,
+    ProductImageSerializer,
 )
 
 
 # Create your views here.
 class ProductViewSet(ModelViewSet):
-    queryset = Product.objects.all()
+    queryset = Product.objects.prefetch_related("images").all()
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = ProductFilter
@@ -70,6 +72,16 @@ class ProductViewSet(ModelViewSet):
                 }
             )
         return super().destroy(request, *args, **kwargs)
+
+
+class ProductImageViewSet(ModelViewSet):
+    serializer_class = ProductImageSerializer
+
+    def get_queryset(self):
+        return ProductImage.objects.filter(product_id=self.kwargs["product_pk"])
+
+    def get_serializer_context(self):
+        return {"product_id": self.kwargs["product_pk"]}
 
 
 class CollectionViewSet(ModelViewSet):
@@ -133,7 +145,7 @@ class CustomerViewSet(ModelViewSet):
 
     @action(detail=False, methods=["GET", "PUT"], permission_classes=[IsAuthenticated])
     def me(self, request):
-        (customer, _) = Customer.objects.get_or_create(user_id=request.user.id)
+        customer = Customer.objects.get(user_id=request.user.id)
         if request.method == "GET":
             serializer = CustomerSerializer(customer)
             return Response(serializer.data)
